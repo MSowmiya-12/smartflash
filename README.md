@@ -6,6 +6,14 @@ The application is built using a React (Vite) frontend, a FastAPI (Uvicorn) back
 
 ---
 
+## Architecture Options Chosen
+
+- **AI/ML Engine (Local Open-Source)**: We selected a completely local AI/ML setup using `spaCy` (`en_core_web_sm` for parsing and NER) and `sentence-transformers` (`all-MiniLM-L6-v2` for semantic centrality scoring). This meets the requirement of running 100% locally without external API keys (such as OpenAI, Gemini, or Claude).
+- **Database (MongoDB Atlas Cloud)**: Set up a MongoDB Atlas cluster to store users, flashcard sets, and review tracking, ensuring shared state between local testing and production cloud deployments.
+- **Containerization (Docker)**: Configured a Dockerfile for the backend to pre-cache the NLP weights inside the image layer, optimizing deployment build speed and resolving dependency compatibility on Render.
+
+---
+
 ## Technical Features
 
 - **User Authentication**: Secure user registration and login using JWT tokens and bcrypt password hashing.
