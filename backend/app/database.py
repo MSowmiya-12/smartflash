@@ -1,11 +1,12 @@
 import logging
+import certifi
 from pymongo import MongoClient
 from app.config import settings
 
 logger = logging.getLogger("smartflash.database")
 
 try:
-    client = MongoClient(settings.MONGODB_URI)
+    client = MongoClient(settings.MONGODB_URI, tlsCAFile=certifi.where())
     db = client[settings.DATABASE_NAME]
     # Simple ping check to verify connection
     client.admin.command('ping')
