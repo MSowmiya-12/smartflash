@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.11
 
 # Prevent python from writing pyc files and buffering stdout/stderr
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -7,14 +7,12 @@ ENV PORT=8000
 
 WORKDIR /code
 
-# Install system dependencies needed for compiling some packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
 # Install python requirements
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+
+# Install packages. Use the PyTorch CPU index to download the lightweight CPU version of PyTorch (~120MB instead of 1.2GB GPU version).
+# This avoids running out of memory (OOM) on the Render free tier during build/installation.
+RUN pip install --no-cache-dir -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cpu
 
 # Download spaCy NLP model during build
 RUN python -m spacy download en_core_web_sm
